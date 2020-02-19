@@ -3,15 +3,15 @@ This Project shows how to upload images into database and view images using java
 and the server used was Glassfish server 4.1.1
 
 # Technology Used
---HTML5
---CSS
---java Servlet 
---JSP
+HTML5
+CSS
+java Servlet 
+JSP
 
 # Author
 Udoh Jeremiah
 
 # Dependencies
---JDK 1.8(Java Development Kit)
---Microsoft sqlserver driver 
---Glassfish server 4.1.1
+JDK 1.8(Java Development Kit)
+Microsoft sqlserver driver 
+Glassfish server 4.1.1
