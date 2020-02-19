@@ -22,6 +22,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
@@ -42,6 +43,7 @@ public class Upload extends HttpServlet {
         String startwith = "";
         String fileName = "";
         
+        String name = request.getParameter("username");
         Part myloc = request.getPart("myimg");//getting the image part of the image uploaded
 
         String filePath = myloc.toString();//converting the part gotten from the uploaded image to string
@@ -89,17 +91,22 @@ public class Upload extends HttpServlet {
                 try {
 
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                try (Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost;databaseName=ImageUpload2;user=//add Username;password=//add Password");) {
+                try (Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost;databaseName=ImageUpload2;user=//add username;password=//add password");) {
                     //setting auto commit false for concurrency which is true by default
                     con.setAutoCommit(false);
 
-                    try (PreparedStatement ps = con.prepareStatement("insert into Images values(?)");) {
-
-                        ps.setString(1, targetPath);
-
+                    try (PreparedStatement ps = con.prepareStatement("insert into Images values(?,?)");) {
+                        
+                        ps.setString(1, name);
+                        ps.setString(2, targetPath);
+                        
                         int img = ps.executeUpdate();
                         if (img > 0) {
-
+                            
+                            HttpSession session=request.getSession();  
+                                 session.setAttribute("uname",name); 
+                                 session.setAttribute("pathdir",fileName);
+                                 
                             out.print("<p style='text-align:center;color:green'>Image Upload of "+fileName+" Successfull</p>");
                             request.getRequestDispatcher("Images.jsp").include(request, response);
                             con.commit();
